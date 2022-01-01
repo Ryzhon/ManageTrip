@@ -6,10 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import CustomUser
+from rest_framework.pagination import PageNumberPagination
+
 
 from trips.api.permissions import IsAuthorOrReadOnly
-from trips.api.serializers import TodoCreateSerializer, TripSerializer, TodoListSerializer, UserInfoSerializer
-from trips.models import Trip, Todo
+from trips.api.serializers import TodoCreateSerializer, TripSerializer, TodoListSerializer, UserInfoSerializer, ChatSerializer
+from trips.models import Trip, Todo, ChatModel
 
 class TripViewSet(viewsets.ModelViewSet):
     queryset = Trip.objects.all().order_by("-created_at")
@@ -60,4 +62,20 @@ class UserInfoAPIView(generics.ListAPIView):
     def get_queryset(self):
         
         return CustomUser.objects.all().order_by("id")
+
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+class ChatListAPIView(generics.ListAPIView):
+    serializer_class= ChatSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = LargeResultsSetPagination
+    def get_queryset(self):
+        kwarg_slug = self.kwargs.get("slug")
+        return ChatModel.objects.filter(room_slug=kwarg_slug).order_by("id")
+
+
+
 

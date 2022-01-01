@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.conf import settings
 
-from trips.models import Todo, Trip
+from trips.models import Todo, Trip, ChatModel
 from users.models import CustomUser
 
 
@@ -100,6 +100,17 @@ class UserInfoSerializer(serializers.ModelSerializer):
         model= CustomUser
         fields=("id", "username", "total_charge")
         # fields="__all__"
+
+class ChatSerializer(serializers.ModelSerializer):
+    created_at = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChatModel
+        exclude=["id", "updated_at"]
+
+    def get_created_at(self, instance):
+        return instance.created_at.strftime("%b %d %H:%M")
+
 
 
 

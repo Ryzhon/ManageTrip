@@ -42,8 +42,7 @@ class Todo(TimeStampedModel):
 
 
 
-# class CalcUser(TimeStampedModel):
-#     From = OneToOneField(CustomUser,on_delete=models.CASCADE, related_name="From")
-#     To = OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="To")
-#     charge = models.IntegerField()
+class ChatModel(TimeStampedModel):
+    room_slug = models.SlugField(max_length=255)
+    message = models.TextField(null=True, blank=True, default="Chat Start")
 

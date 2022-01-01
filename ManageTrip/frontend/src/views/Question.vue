@@ -1,7 +1,9 @@
 <template>
 <div>
 <div>
-  <h1>{{ this.Subject.content }}</h1>
+  <h1>{{ Subject.content }}
+  </h1>
+
 </div>
 
 
@@ -48,16 +50,9 @@
           Load More
         </button>
 
-<div>
-  <h1>welcome to the room </h1>
-  <div id="messagescontainer">
-    <h3>message here</h3>
-        </div>
-        <div>
-            <input type="text" name="" id="messageinputfield">
-            <input type="submit" name="" id="sendbutton" value="send">
-        </div>
-</div>
+<ChatComponent
+:slug="this.slug"
+:loginUser="this.loginUser"/>
 </div>
 
 
@@ -66,11 +61,13 @@
 <script>
 import { axios } from "@/common/api.service.js";
 import TodoComponent from "@/components/Todo.vue"
+import ChatComponent from "@/components/Chat.vue"
 
 export default{
     name: "Trip",
     components:{
-        TodoComponent
+        TodoComponent,
+        ChatComponent
     },
     data(){
         return {
@@ -88,7 +85,9 @@ export default{
             user_receive:{},
             loginUser:null,
             next: null,
-            Subject:null
+            Subject:null,
+            connection:null,
+
         }
     },
     props: {
@@ -100,20 +99,20 @@ export default{
     // type: Object,
     // required: true
     // }
-  },
+    },
     methods:{
         async getTripsData(){
             const endpoint=`/api/v1/trips/${this.slug}/`;
             try {
             const response = await axios.get(endpoint);
             this.Subject = response.data
-            console.log(this.Subject)
+            // console.log(this.Subject)
             } catch (error) {
                 console.log(error)
             }
         },
 
-            async getTripsAnswers() {
+      async getTripsAnswers() {
       // get a page of answers for a single question from the REST API's paginated 'Questions Endpoint'
       let endpoint = `/api/v1/trips/${this.slug}/todos/`;
       if (this.next) {
@@ -122,7 +121,7 @@ export default{
       try {
         const response = await axios.get(endpoint);
         this.answers.push(...response.data.results);
-        // console.log(response)
+        // console.log(response.data.results)
         if (response.data.next) {
           this.next = response.data.next;
         } else {
@@ -266,14 +265,22 @@ export default{
 
     getLogin(){
       this.loginUser=window.localStorage.getItem("username")
-    }
     },
+//---------------------------------------------------------------------------//
+
+  
+    
+    
+    },
+
+
 
     created(){
             this.getTripsAnswers(),
             this.getUserInfo()
             this.getLogin()
             this.getTripsData()
+            
    
         },
         

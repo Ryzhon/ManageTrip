@@ -1,5 +1,5 @@
 import os
-from chat.consumers import ChatConsumer
+from trips.consumers import ChatConsumer
 import django
 from channels.http import AsgiHandler
 from channels.routing import ProtocolTypeRouter, URLRouter

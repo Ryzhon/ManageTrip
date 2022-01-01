@@ -21,7 +21,10 @@ urlpatterns = [
          tv.TodoRUDAPIView.as_view(),
          name="todo-detail"),
      path("userinfo/",tv.UserInfoAPIView.as_view(),
-     name="user-info")
+     name="user-info"),
+     path("trips/<slug:slug>/chat/", 
+         tv.ChatListAPIView.as_view(),
+         name="chat-list"),
 
     # path("answers/<uuid:uuid>/like/",
     #      tv.AnswerLikeAPIView.as_view(),

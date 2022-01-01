@@ -4,7 +4,7 @@ from django.utils.crypto import get_random_string
 from django.utils.text import slugify
 from users.models import CustomUser
 from django.core.signals import request_finished
-from trips.models import Trip, Todo
+from trips.models import Trip, Todo, ChatModel
 from django.db.models import F
 
 
@@ -16,6 +16,7 @@ def add_slug_to_question(sender, instance, *args, **kwargs):
         slug = slugify(instance.content)
         random_string = get_random_string(length=8)
         instance.slug = slug + "-" + random_string
+        ChatModel(room_slug=instance.slug).save()
 
 @receiver(post_save, sender=Todo)
 def calc_total_charge(sender, instance, *args, **kwargs):
