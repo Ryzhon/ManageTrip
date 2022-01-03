@@ -1,16 +1,36 @@
 <template>
-  <div>
+<!-- <div>
     <h1>Where did you go?</h1>
     <form @submit.prevent="onSubmit">
-      <textarea
+  
+      <input
         v-model="TripBody"
         placeholder="Tourist site"
-        rows="1"
-      ></textarea>
-      <button type="submit">Publish</button>
+        v-on:keyup.enter="onSubmit"
+      >
+      <input type="submit" value="Publish">
     </form>
     <p v-if="error">{{ error }}</p>
+  </div> -->
+
+  <div class="min-h-screen bg-gray-100 flex justify-center items-center ">
+  <div class="bg-white p-4 w-96 rounded-md shadow-lg" >
+    <h1 class="text-lg font-bold text-gray-500">Where did you go?</h1>
+    <!-- <div class="mt-5 mb-2 border-2 py-1 px-3 flex justify-between rounde-md"> -->
+      <form @submit.prevent="onSubmit" class="mt-5 mb-2 border-2 py-1 px-3 flex justify-between rounde-lg">
+      <input 
+      
+      class="flex-grow outline-none text-gray-600 focus:text-blue-600 " 
+      type="text" 
+      placeholder="Tourist site..."
+      v-model="TripBody"
+      v-on:keyup.enter="onSubmit" />
+      <button  type="submit" class="w-content bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">Publish</button>
+      </form>
+    <!-- </div> -->
   </div>
+</div>
+  
 </template>
 
 <script>

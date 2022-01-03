@@ -45,4 +45,5 @@ class Todo(TimeStampedModel):
 class ChatModel(TimeStampedModel):
     room_slug = models.SlugField(max_length=255)
     message = models.TextField(null=True, blank=True, default="Chat Start")
+    author = models.CharField(max_length=20)
 
