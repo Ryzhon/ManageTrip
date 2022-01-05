@@ -4,8 +4,7 @@
     :send_charge="total_charge"
     :login_user="login_user"/>
   </div>
-  <router-view
-  />
+  <router-view/>
 </template>
 <script>
 import { axios } from "@/common/api.service.js";
@@ -21,9 +20,7 @@ export default {
     return{
     userOpt:[],
      total_charge:[],
-     login_user:null,
-    
-
+     login_user:null
     }
   },
 
@@ -52,20 +49,15 @@ export default {
            this.userOpt.push(userId.username)
            this.total_charge = Object.assign({}, this.total_charge, {[this.userOpt[i]]:0})
         }
-        // this.$set(this.someObj, this.userOpt[0], 0)
-        // console.log(this.userOpt[0])
-        // console.log(this.total_charge["admin"])
       } catch (error) {
         console.log(error.response);
-        alert(error.response.statusText);
-        
-      } 
-  }
+        alert(error.response.statusText);    
+      }
+    }
   },
   created() {
     this.setUserInfo();
     this.getUserInfo()
-    
   },
 };
 </script>
