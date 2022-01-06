@@ -36,7 +36,7 @@
           >
             Delete
           </button>
-          <button v-show="showDeleteConfirmationBtn" @click="triggerDeleteAnswer"
+          <button v-show="showDeleteConfirmationBtn" @click="$store.dispatch('triggerDeleteAnswer', this.answer)"
             class="border-2 ml-2 text-right"> 
             Yes, delete
           </button>
@@ -62,9 +62,9 @@ export default {
     };
   },
   methods: {
-    triggerDeleteAnswer() {
-      this.$emit("delete-answer", this.answer);
-    },
+    // triggerDeleteAnswer() {
+    //   this.$emit("delete-answer", this.answer);
+    // },
     triggerSend() {
       this.$emit("calc-send", this.answer.From, this.answer.charge);
     },

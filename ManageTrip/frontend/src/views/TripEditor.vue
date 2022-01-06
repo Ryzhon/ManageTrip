@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async performNetworkRequest() {
-      const endpoint = "/api/v1/trips/";
+      let endpoint = "/api/v1/trips/";
       let method = "POST";
       if (this.slug !== undefined && this.slug !== "") {
         endpoint += `${this.slug}/`;

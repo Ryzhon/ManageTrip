@@ -53,7 +53,7 @@
     </div>
     <TodoComponent
       id="todoTask"
-      v-for="answer in answers"
+      v-for="answer in this.$store.state.trip.answers"
       :answer="answer"
       :key="answer.uuid"
       @delete-answer="deleteTask"
@@ -63,7 +63,7 @@
     />
     <button v-show="next" @click="getTripsAnswers">Load More</button>
 
-    <ChatComponent :slug="this.slug" :loginUser="this.loginUser" />
+    <ChatComponent :slug="this.slug" :loginUser="this.$store.state.user.get_login_user" />
   </div>
 </template>
 
@@ -116,25 +116,25 @@ export default {
       }
     },
 
-    async getTripsAnswers() {
-      // get a page of answers for a single question from the REST API's paginated 'Questions Endpoint'
-      let endpoint = `/api/v1/trips/${this.slug}/todos/`;
-      if (this.next) {
-        endpoint = this.next;
-      }
-      try {
-        const response = await axios.get(endpoint);
-        this.answers.push(...response.data.results);
-        if (response.data.next) {
-          this.next = response.data.next;
-        } else {
-          this.next = null;
-        }
-      } catch (error) {
-        console.log(error.response)
-        alert(error.response.statusText);
-      }
-    },
+    // async getTripsAnswers() {
+    //   let endpoint = `/api/v1/trips/${this.slug}/todos/`;
+    //   if (this.next) {
+    //     endpoint = this.next;
+    //   }
+    //   try {
+    //     const response = await axios.get(endpoint);
+    //     this.answers.push(...response.data.results);
+    //     if (response.data.next) {
+    //       this.next = response.data.next;
+    //     } else {
+    //       this.next = null;
+    //     }
+    //     console.log(response)
+    //   } catch (error) {
+    //     console.log(error.response)
+    //     alert(error.response.statusText);
+    //   }
+    // },
 
     async onSubmit() {
       if (!this.todoContent) {
@@ -142,8 +142,8 @@ export default {
         return;
       }
       const endpoint = `/api/v1/trips/${this.slug}/todo/`;
-      const pkFrom = await this.ToIdFrom(this.todoFrom);
-      const pkTo = await this.ToIdTo(this.todoTo);
+      let pkFrom = await this.ToIdFrom(this.todoFrom);
+      let pkTo = await this.ToIdTo(this.todoTo);
       try {
         const response = await axios.post(endpoint, {
           body: this.todoContent,
@@ -151,14 +151,13 @@ export default {
           From: pkFrom,
           To: pkTo,
         });
-      
         this.todoFrom = null;
         this.todoTo = null;
         this.todoContent = null;
         this.todoCharge = null;
         pkFrom = null;
         pkTo = null;
-
+        console.log(response)
         const res = await axios.get(`/api/v1/trips/${this.slug}/todos/`)
         this.answers = res.data.results
         if (this.error) {
@@ -246,21 +245,19 @@ export default {
         this.user_send[userF] = this.user_send[userF] + fig;
       }
     },
-    getLogin() {
-      this.loginUser = window.localStorage.getItem("username");
-    },
-  },
 
+  },
   created() {
-    this.getTripsAnswers(), 
+    this.$store.dispatch("getTripsAnswers", this.slug), 
     this.getUserInfo();
-    this.getLogin();
+    this.$store.dispatch("getLogin")
     this.getTripsData();
   },
   computed:{
     getSubjectContent(){
       return this.Subject?.content
-    }
+    },
+
   }
 };
 </script>
