@@ -1,8 +1,7 @@
 <template>
   <div id="nav">
     <NavbarComponent
-    :send_charge="total_charge"
-    :login_user="login_user"/>
+    :login_user="$store.state.user.get_login_user"/>
   </div>
   <router-view/>
 </template>

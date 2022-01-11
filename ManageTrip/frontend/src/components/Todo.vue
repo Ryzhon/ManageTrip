@@ -5,7 +5,7 @@
         type="checkbox"
         id="check"
         v-model="checked"
-        @click="changeTotal"
+        @click="this.$store.dispatch('changeTotal',{userF:this.answer.From,userT:this.answer.To,fig:this.answer.charge,check:this.checked})"
       />
       <label for="check" v-show="!checked">
         <span class="mr-3">
@@ -36,7 +36,10 @@
           >
             Delete
           </button>
-          <button v-show="showDeleteConfirmationBtn" @click="$store.dispatch('triggerDeleteAnswer', this.answer)"
+          <button v-show="showDeleteConfirmationBtn" @click="$store.dispatch('triggerDeleteAnswer', this.answer);
+          this.$store.dispatch('changeTotal',{userF:this.answer.From,userT:this.answer.To,fig:this.answer.charge,check:this.checked});
+          this"
+
             class="border-2 ml-2 text-right"> 
             Yes, delete
           </button>
@@ -61,29 +64,10 @@ export default {
       showDeleteConfirmationBtn: false,
     };
   },
-  methods: {
-    // triggerDeleteAnswer() {
-    //   this.$emit("delete-answer", this.answer);
-    // },
-    triggerSend() {
-      this.$emit("calc-send", this.answer.From, this.answer.charge);
-    },
-    triggerReceive() {
-      this.$emit("calc-receive", this.answer.To, this.answer.charge);
-    },
-    changeTotal() {
-      this.$emit(
-        "change-total",
-        this.answer.From,
-        this.answer.To,
-        this.answer.charge,
-        this.checked
-      );
-    },
-  },
   created() {
-    this.triggerSend();
-    this.triggerReceive();
+    this.$store.dispatch("calc_Send", {user:this.answer.From,fig:this.answer.charge});
+    this.$store.dispatch("calc_Receive", {user:this.answer.To, fig:this.answer.charge});
+    
   },
 };
 </script>

@@ -1,6 +1,5 @@
 import { axios } from "@/common/api.service.js";
 
-
 export default {
     state: {
         set_login_user:null,
@@ -10,6 +9,9 @@ export default {
     mutations:{
         UPDATE_USERCHARGE(state, user){
             state.userOpt = user
+        },
+        UPDATE_USERNAME(state, requser){
+          state.get_login_user = requser
         }
     },
     actions:{
@@ -19,7 +21,7 @@ export default {
               const requestUser = response.data["username"]
               window.localStorage.setItem("username", requestUser);
               context.state.set_login_user=window.localStorage.getItem("username")
-              
+              context.commit("UPDATE_USERNAME", requestUser)
             } catch (error) {
               console.log(error.response);
               alert(error.response.statusText);

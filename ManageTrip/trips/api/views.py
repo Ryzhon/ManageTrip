@@ -2,21 +2,20 @@ from rest_framework import generics, serializers, status, viewsets
 from rest_framework import permissions
 from rest_framework.exceptions import ValidationError
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.models import CustomUser
 from rest_framework.pagination import PageNumberPagination
-
-
 from trips.api.permissions import IsAuthorOrReadOnly
 from trips.api.serializers import TodoCreateSerializer, TripSerializer, TodoListSerializer, UserInfoSerializer, ChatSerializer
 from trips.models import Trip, Todo, ChatModel
 
 class TripViewSet(viewsets.ModelViewSet):
+    ##これが/trips/slug/のパーミッションに影響している
     queryset = Trip.objects.all().order_by("-created_at")
     serializer_class = TripSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = [AllowAny]
     lookup_field = "slug"
 
     def perform_create(self, serializer):
@@ -26,7 +25,7 @@ class TodoCreateAPIView(generics.CreateAPIView):
 
     queryset = Todo
     serializer_class = TodoCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
 
     def perform_create(self, serializer):
         request_user = self.request.user
@@ -52,7 +51,7 @@ class TodoRUDAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Todo.objects.all()
     serializer_class = TodoCreateSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticated]
     lookup_field = "uuid"
 
 class UserInfoAPIView(generics.ListAPIView):

@@ -33,7 +33,7 @@
       <div>
         <a href="#responsive-header" 
         class="block mt-4 lg:inline-block lg:mt-0 text-white  ">
-        login: {{ login_user }}
+        login: {{ $store.state.user.get_login_user }}
         </a>
       </div>
   </div>
@@ -43,12 +43,5 @@
 <script>
 export default {
   name: "NavbarComponent",
-  props:{
-    
-    login_user:{
-      type:String,
-      required:true
-    }
-  }
 };
 </script>

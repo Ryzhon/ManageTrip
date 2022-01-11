@@ -5,11 +5,11 @@
     <form @submit.prevent="onSubmit">
       <label for="from" >From</label>         
       <select id="from" v-model="todoFrom">
-        <option v-for="user in userOpt" :key="user.id" >{{user}}</option>
+        <option v-for="user in this.$store.state.user.userOpt" :key="user.id" >{{user}}</option>
       </select>
       <label for="to">To</label>
       <select id="to" v-model="todoTo">
-        <option v-for="user in userOpt" :key="user.id">{{user}}</option>
+        <option v-for="user in this.$store.state.user.userOpt" :key="user.id">{{user}}</option>
       </select>
       <label for="charge"></label>
       <input type="number" id="charge" placeholder="charge" v-model="todoCharge">
@@ -60,20 +60,6 @@ export default {
           name: "question",
           params: { slug: this.questionSlug },
         });
-      } catch (error) {
-        console.log(error.response);
-        alert(error.response.statusText);
-      }
-    },
-    async getUserInfo(){
-      const endpoint='/api/v1/userinfo/';
-      try {
-        let userId = null
-        const response = await axios.get(endpoint)
-        for (let i = 0; i < response.data.results.length; i++) {
-          userId = response.data.results[i]
-          this.userOpt.push(userId.username)   
-        }
       } catch (error) {
         console.log(error.response);
         alert(error.response.statusText);
